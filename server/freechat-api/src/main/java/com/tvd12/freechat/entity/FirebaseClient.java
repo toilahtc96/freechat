@@ -2,6 +2,7 @@ package com.tvd12.freechat.entity;
 
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @EzySingleton
 public class FirebaseClient extends EzyLoggable {
 
-    protected final FirebaseMessaging firebaseMessaging;
+    protected FirebaseMessaging firebaseMessaging;
 
     public FirebaseClient() {
 
@@ -38,7 +39,8 @@ public class FirebaseClient extends EzyLoggable {
 
             firebaseMessaging = FirebaseMessaging.getInstance();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            firebaseMessaging = null;
+            logger.info("Loi khi khoi tao firebase: "+ e.getMessage());
         }
     }
 
@@ -61,23 +63,23 @@ public class FirebaseClient extends EzyLoggable {
         }
     }
 
-    public int notify(Collection<String> tokens, NotifyMessage message) {
-        MulticastMessage m = MulticastMessage.builder()
-                .setNotification(Notification.builder()
-                        .setTitle(message.getTitle())
-                        .setBody(message.getBody())
-                        .setImage(message.getImageURL())
-                        .build())
-                .putAllData(message.getData())
-                .addAllTokens(tokens)
-                .build();
-        try {
-            BatchResponse response = firebaseMessaging.sendMulticast(m);
-            return response.getSuccessCount();
-        } catch (FirebaseMessagingException e) {
-            logger.error("notify to: {} clients error", tokens.size(), e);
-            return 0;
-        }
-    }
+//    public int notify(Collection<String> tokens, NotifyMessage message) {
+//        MulticastMessage m = MulticastMessage.builder()
+//                .setNotification(Notification.builder()
+//                        .setTitle(message.getTitle())
+//                        .setBody(message.getBody())
+//                        .setImage(message.getImageURL())
+//                        .build())
+//                .putAllData(message.getData())
+//                .addAllTokens(tokens)
+//                .build();
+//        try {
+//            BatchResponse response = firebaseMessaging.sendMulticast(m);
+//            return response.getSuccessCount();
+//        } catch (FirebaseMessagingException e) {
+//            logger.error("notify to: {} clients error", tokens.size(), e);
+//            return 0;
+//        }
+//    }
 
 }

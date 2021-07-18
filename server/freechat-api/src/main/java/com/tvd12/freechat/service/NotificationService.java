@@ -9,6 +9,4 @@ public interface NotificationService {
 
     boolean notify(Set<ChatUserFirebaseToken> setUsername, ChatMessage message);
 
-    int notify(Collection<String> tokens, ChatMessage message);
-
 }

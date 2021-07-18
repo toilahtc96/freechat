@@ -17,7 +17,6 @@ import java.util.Set;
 @EzySingleton
 public class NotificationServiceImpl extends EzyLoggable implements NotificationService {
 
-    //su dung class moi
     @EzyAutoBind
     private FirebaseClient fbClient;
 
@@ -28,7 +27,7 @@ public class NotificationServiceImpl extends EzyLoggable implements Notification
         notifyMessage.setTitle("Bạn có tin nhắn mới từ "+ message.getSender());
         notifyMessage.setImageURL("https://ibb.co/R703kxf");
         Map<String, String> bodyTest = new HashMap<>();
-        bodyTest.put("Nội dung", message.getMessage());
+        bodyTest.put("Nội dung: ", message.getMessage());
         notifyMessage.setData(bodyTest);
 
         try {
@@ -42,20 +41,20 @@ public class NotificationServiceImpl extends EzyLoggable implements Notification
         }
     }
 
-    public int notify(Collection<String> tokens, ChatMessage message) {
-        MulticastMessage m = MulticastMessage.builder()
-                .setNotification(Notification.builder()
-                        .setTitle(message.getSender())
-                        .setBody(message.getMessage())
-                        .build())
-                .addAllTokens(tokens)
-                .build();
-        try {
-            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(m);
-            return response.getSuccessCount();
-        } catch (FirebaseMessagingException e) {
-            logger.error("notify to: {} clients error", tokens.size(), e);
-            return 0;
-        }
-    }
+//    public int notify(Collection<String> tokens, ChatMessage message) {
+//        NotifyMessage notifyMessage = new NotifyMessage();
+//        notifyMessage.setBody(message.getMessage());
+//        notifyMessage.setTitle("Bạn có tin nhắn mới từ "+ message.getSender());
+//        notifyMessage.setImageURL("https://ibb.co/R703kxf");
+//        Map<String, String> bodyTest = new HashMap<>();
+//        bodyTest.put("Nội dung: ", message.getMessage());
+//        notifyMessage.setData(bodyTest);
+//        try {
+//            int response = fbClient.notify(tokens,notifyMessage);
+//            return response;
+//        } catch (Exception e) {
+//            logger.error("notify to: {} clients error", tokens.size(), e);
+//            return 0;
+//        }
+//    }
 }
