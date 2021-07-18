@@ -1,15 +1,16 @@
 package com.tvd12.freechat
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.StrictMode
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.tvd12.freechat.constant.FIREBASE_TOKEN_KEY
 import com.tvd12.freechat.firebase.cloud.message.MyFirebaseMessagingService
 import com.tvd12.freechat.socket.SocketClientProxy
 import java.io.File
@@ -117,9 +118,12 @@ class MainActivity : AppCompatActivity() {
             if (oldUsername == newUsername && socketClient.isConnected()) {
                 startMessageActivity()
             } else {
+                val prefs: SharedPreferences = getSharedPreferences("_", MODE_PRIVATE)
+
                 loadingView.visibility = View.VISIBLE
                 connectionData["username"] = newUsername
                 connectionData["password"] = passwordView.text.toString()
+                connectionData[FIREBASE_TOKEN_KEY] = prefs.getString("fb", "")
                 SocketClientProxy.getInstance().connectToServer()
             }
         }

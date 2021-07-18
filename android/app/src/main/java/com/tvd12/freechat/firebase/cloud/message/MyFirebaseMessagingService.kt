@@ -1,18 +1,15 @@
 package com.tvd12.freechat.firebase.cloud.message
 
-import android.R
 import android.content.Context
 import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.tvd12.freechat.MainActivity
-
 
 class MyFirebaseMessagingService : FirebaseMessagingService(){
     private lateinit var auth: FirebaseAuth

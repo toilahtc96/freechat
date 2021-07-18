@@ -3,6 +3,7 @@ package com.tvd12.freechat.plugin.controller;
 import com.tvd12.ezyfox.bean.annotation.EzyAutoBind;
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 import com.tvd12.ezyfox.core.annotation.EzyEventHandler;
+import com.tvd12.ezyfox.entity.EzyObject;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.sercurity.EzySHA256;
 import com.tvd12.ezyfoxserver.constant.EzyEventNames;
@@ -12,6 +13,8 @@ import com.tvd12.ezyfoxserver.controller.EzyAbstractPluginEventController;
 import com.tvd12.ezyfoxserver.event.EzyUserLoginEvent;
 import com.tvd12.ezyfoxserver.exception.EzyLoginErrorException;
 import com.tvd12.freechat.common.entity.ChatUser;
+import com.tvd12.freechat.common.entity.ChatUserFirebaseToken;
+import com.tvd12.freechat.common.service.ChatUserFirebaseTokenService;
 import com.tvd12.freechat.common.service.ChatUserService;
 
 import lombok.Getter;
@@ -26,16 +29,28 @@ public class ChatUserLoginController
 
 	@EzyAutoBind
 	private ChatUserService userService;
-	
+	@EzyAutoBind
+	private ChatUserFirebaseTokenService chatUserFirebaseTokenService;
+	private final String FIREBASE_TOKEN_KEY = "firebaseToken";
 	@Override
 	public void handle(EzyPluginContext ctx, EzyUserLoginEvent event) {
 		logger.info("handle user {} login in", event.getUsername());
-
 		validateEvent(event);
-		
-		String username = event.getUsername();
+		String username =  event.getUsername();
 		String password = encodePassword(event.getPassword());
-		
+
+//		get token
+		EzyObject data = (EzyObject)(event.getData());
+		String firebaseToken = data.get(FIREBASE_TOKEN_KEY);
+		logger.info("handle user {} with firebase token {}",event.getUsername(),firebaseToken);
+		if(firebaseToken != null) {
+			ChatUserFirebaseToken userFirebaseToken = new ChatUserFirebaseToken(
+					firebaseToken,
+					username
+			);
+			chatUserFirebaseTokenService.saveUserFirebaseToken(userFirebaseToken);
+		}
+
 		ChatUser user = userService.getUser(username);
 		if(user == null)
 			user = userService.createUser(username, password);

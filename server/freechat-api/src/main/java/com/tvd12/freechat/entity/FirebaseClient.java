@@ -29,8 +29,9 @@ public class FirebaseClient extends EzyLoggable {
         try {
             InputStream inputStream = EzyAnywayInputStreamLoader.builder()
                     .build()
-                    .load("message-project-6af76-firebase-adminsdk-pnm7d-55a9461196.json");
-            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .load("message-project-6af76-firebase-adminsdk-wf3g6-f45c6e3a87.json");
+
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(inputStream))
                     .build();
             FirebaseApp.initializeApp(options);
@@ -52,7 +53,7 @@ public class FirebaseClient extends EzyLoggable {
                 .setToken(token)
                 .build();
         try {
-            FirebaseMessaging.getInstance().send(m);
+            firebaseMessaging.send(m);
             return true;
         } catch (Exception e) {
             logger.error("notify to: {} error", token, e);

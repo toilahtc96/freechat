@@ -115,6 +115,9 @@ class MessageActivity : AppActivity() {
             backToContactView()
         }
         sendButtonView.setOnClickListener {
+            val mPrefs = getSharedPreferences("_", MODE_PRIVATE) //add key
+            val prefsEditor = mPrefs.edit()
+
             val messageText = messageInputView.text.toString()
             if (targetChannelId == 0L) {
                 SocketRequests.sendSystemMessage(messageText)
