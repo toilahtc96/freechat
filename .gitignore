@@ -5,3 +5,8 @@
 */.iml
 logs/
 */logs/
+.gradle/
+.gitattributes
+build.gradle
+settings.gradle
+*.json
