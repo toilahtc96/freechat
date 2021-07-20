@@ -70,7 +70,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector.version}</version>
 			<scope>test</scope>
-		</dependency><!-- https://mvnrepository.com/artifact/com.google.firebase/firebase-admin -->
+		</dependency>
 		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
