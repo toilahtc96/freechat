@@ -10,6 +10,10 @@
 	<artifactId>freechat-startup</artifactId>
 	<name>freechat-startup</name>
 	<url>http://maven.apache.org</url>
+
+	<properties>
+		<json.version>2.12.3</json.version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
@@ -31,6 +35,11 @@
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-server-embedded</artifactId>
 			<version>${ezy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${json.version}</version>
 		</dependency>
 	</dependencies>
 	
