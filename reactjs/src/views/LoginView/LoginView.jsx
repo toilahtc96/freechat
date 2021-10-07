@@ -2,6 +2,7 @@ import * as React from 'react';
 import Mvc from 'mvc-es6';
 import SocketProxy from '../../socket/SocketProxy'
 import Component from '../components'
+import { getToken, messaging } from '../../firebase';
 
 class LoginView extends React.Component {
     constructor(props) {
@@ -13,16 +14,18 @@ class LoginView extends React.Component {
         let mvc = Mvc.getInstance();
         let models = mvc.models;
         this.connection = models.connection;
-        if(!this.connection) {
+        if (!this.connection) {
             this.connection = {
-                username : "",
-                password : ""
+                username: "",
+                password: "",
+                firebaseToken: ""
             };
             models.connection = this.connection;
         }
         this.state = {
-            username : this.connection.username,
-            password : this.connection.password
+            username: this.connection.username,
+            password: this.connection.password,
+
         }
     }
 
@@ -30,8 +33,20 @@ class LoginView extends React.Component {
         this.connection.url = this.state.url;
         this.connection.username = this.state.username;
         this.connection.password = this.state.password;
-        let socketProxy = SocketProxy.getInstance();
-        socketProxy.connect();
+        messaging.getToken()
+            .then(token => {
+                this.connection.firebaseToken = token;
+                console.log("Conght token: " + this.connection.firebaseToken);
+
+            })
+            .catch(err => {
+                console.log(err)
+
+            }).finally(() => {
+                let socketProxy = SocketProxy.getInstance();
+                socketProxy.connect();
+            })
+
     }
 
     onKeyDown(e) {
@@ -40,15 +55,15 @@ class LoginView extends React.Component {
     }
 
     onUsernameChange(e) {
-        this.setState({username: e.target.value});
+        this.setState({ username: e.target.value });
     }
 
     onPasswordChange(e) {
-        this.setState({password: e.target.value});
+        this.setState({ password: e.target.value });
     }
 
     render() {
-        const {username, password} = this.state;
+        const { username, password } = this.state;
         return (
             <div className="login-div-wrap">
                 <div className="login-div">
@@ -85,8 +100,8 @@ class LoginView extends React.Component {
                     </div>
                 </div>
             </div>
-       );
+        );
     }
- }
+}
 
- export default LoginView;
+export default LoginView;

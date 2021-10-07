@@ -21,7 +21,8 @@ class SocketProxy {
             let connection = models.connection;
             let username = connection.username;
             let password = connection.password;
-            return ["freechat", username, password, []];
+            let firebaseToken = connection.firebaseToken
+            return ["freechat", username, password, {firebaseToken}];
         };
 
         let loginSuccessHandler = new Ezy.LoginSuccessHandler();

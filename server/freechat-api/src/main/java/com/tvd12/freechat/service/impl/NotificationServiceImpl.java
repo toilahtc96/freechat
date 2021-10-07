@@ -28,6 +28,7 @@ public class NotificationServiceImpl extends EzyLoggable implements Notification
 
         try {
             userTokens.forEach(userToken -> {
+                logger.info("call Noti ");
                 firebaseClient.notify(userToken.getFirebaseToken(), notifyMessage);
             });
         } catch (Exception e) {

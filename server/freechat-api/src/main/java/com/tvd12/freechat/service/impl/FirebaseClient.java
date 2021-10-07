@@ -11,6 +11,7 @@ import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.freechat.entity.NotifyMessage;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
 
@@ -39,16 +40,22 @@ public class FirebaseClient extends EzyLoggable {
     }
 
     public boolean notify(String token, NotifyMessage message) {
+        if(StringUtils.isBlank(token)){
+            logger.info("This user no have token firebase to send Noti");
+            return false;
+        }
+
         Message m = Message.builder()
                 .setNotification(Notification.builder()
                         .setTitle(message.getTitle())
                         .setBody(message.getBody())
                         .setImage(message.getImageURL())
                         .build())
-                .putAllData(message.getData())
+//                .putAllData(message.getData())
                 .setToken(token)
                 .build();
         try {
+            logger.info("Do send Noti");
             firebaseMessaging.send(m);
             return true;
         } catch (Exception e) {

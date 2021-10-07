@@ -43,16 +43,21 @@ public class ChatUserLoginController
 
 
 //		get token
-        EzyObject data = (EzyObject) (event.getData());
-        String firebaseToken = data.get(FIREBASE_TOKEN_KEY);
-        logger.info("handle user {} with firebase token {}", event.getUsername(), firebaseToken);
-        if (firebaseToken != null) {
-            ChatUserFirebaseToken userFirebaseToken = new ChatUserFirebaseToken(
-                    firebaseToken,
-                    username
-            );
-            chatUserFirebaseTokenService.saveUserFirebaseToken(userFirebaseToken);
+        try {
+            EzyObject data = (EzyObject) (event.getData());
+            String firebaseToken = data.get(FIREBASE_TOKEN_KEY);
+            logger.info("handle user {} with firebase token {}", event.getUsername(), firebaseToken);
+            if (firebaseToken != null) {
+                ChatUserFirebaseToken userFirebaseToken = new ChatUserFirebaseToken(
+                        firebaseToken,
+                        username
+                );
+                chatUserFirebaseTokenService.saveUserFirebaseToken(userFirebaseToken);
+            }
+        }catch (Exception ex){
+            logger.info("handle user {} have error", event.getUsername());
         }
+
 
         ChatUser user = userService.getUser(username);
         if (user == null)
